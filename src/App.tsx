@@ -1,9 +1,14 @@
-import { useEffect } from "react";
-import "./game/index"; // Triggers kaboom init
+import { useState } from "react";
+import "./App.css";
+import "./game/index";
+import StartScreen from "./components/StartScreen";
 
 function App() {
+  const [started, setStarted] = useState(false);
+
   return (
-    <div style={{ textAlign: "center" }}>
+    <div>
+      {!started && <StartScreen onStart={() => setStarted(true)} />}
       <canvas id="game" />
     </div>
   );
