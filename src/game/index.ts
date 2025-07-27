@@ -1,6 +1,6 @@
 import kaboom from "kaboom";
 
-// Initialize kaboom and store all helper functions
+// Initialize kaboom and assign it to variable k
 const k = kaboom({
   width: 640,
   height: 360,
@@ -9,18 +9,48 @@ const k = kaboom({
   canvas: document.getElementById("game") as HTMLCanvasElement,
 });
 
-// Use destructuring to access kaboom methods
-const { loadSprite, add, sprite, pos, area, body, onKeyDown } = k;
+// Use destructuring  to get acess to kaboom function
+const { loadSprite, add, sprite, pos, area, body, onKeyDown, z } = k;
 
 // Load a test sprite
 loadSprite("player", "https://i.imgur.com/Wb1qfhK.png");
 
+// Load a title sheet
+loadSprite("tileset", "https://i.imgur.com/9g3FUnE.png", {
+  sliceX: 8,
+  sliceY: 8,
+});
+
+const map = [
+  "==========",
+  "=        =",
+  "=        =",
+  "=        =",
+  "=        =",
+  "==========",
+];
+
+const tileSize = 16;
+
+k.addLevel(map, {
+  tileWidth: tileSize,
+  tileHeight: tileSize,
+  tiles: {
+    "=": () => [
+      sprite("tileset", { frame: 3 }),
+      area(),
+      body({ isStatic: true }),
+    ],
+    " ": () => [sprite("tileset", { frame: 0 })],
+  },
+});
 // Add the player
 const player = add([
   sprite("player"),
-  pos(100, 100),
+  pos(32, 32),
   area(),
   body(),
+  z(1),
 ]);
 
 // Movement
