@@ -4,6 +4,7 @@ import "./game/index";
 import StartScreen from "./components/StartScreen";
 import ProjectsPanel from "./components/ProjectsPanel";
 import CVPanel from "./components/CVPanel";
+import TVFrame from "./components/TVFrame";
 
 function App() {
   const [started, setStarted] = useState(false);
@@ -13,7 +14,7 @@ function App() {
   const cvUrl = "/cv.pdf"; // place cv.pdf in /public or use a full URL
 
   return (
-    <div>
+    <TVFrame>
       {!started && (
         <StartScreen
           onStart={() => setStarted(true)}
@@ -39,7 +40,7 @@ function App() {
       {/* Overlays available on Home or even during game if you want */}
       {showProjects && <ProjectsPanel onClose={() => setShowProjects(false)} />}
       {showCV && <CVPanel onClose={() => setShowCV(false)} cvUrl={cvUrl} />}
-    </div>
+    </TVFrame>
   );
 }
 
