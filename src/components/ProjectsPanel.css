@@ -1,0 +1,55 @@
+.projects-panel {
+  position: absolute;
+  top: 5%;
+  left: 10%;
+  width: 80%;
+  height: 90%;
+  background: black;
+  color: limegreen;
+  border: 2px solid limegreen;
+  padding: 1rem;
+  font-family: "Press Start 2P", monospace;
+  z-index: 20;
+  overflow-y: auto;
+}
+
+.projects-panel h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.card {
+  background: #111;
+  border: 2px solid limegreen;
+  padding: 1rem;
+  text-align: left;
+}
+
+.stack {
+  font-size: 10px;
+  color: lightgreen;
+  margin: 0.5rem 0;
+}
+
+.links a {
+  font-size: 10px;
+  color: cyan;
+  margin-right: 0.5rem;
+  text-decoration: none;
+}
+
+.close-btn {
+  margin-top: 1rem;
+  font-family: "Press Start 2P", monospace;
+  background: none;
+  border: 2px solid limegreen;
+  color: limegreen;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
