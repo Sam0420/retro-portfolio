@@ -1,17 +1,24 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
-import "./game/index";
+// REMOVE: import "./game/index";
 import StartScreen from "./components/StartScreen";
 import ProjectsPanel from "./components/ProjectsPanel";
 import CVPanel from "./components/CVPanel";
 import TVFrame from "./components/TVFrame";
+import { initGame } from "./game/index";
 
 function App() {
   const [started, setStarted] = useState(false);
   const [showProjects, setShowProjects] = useState(false);
   const [showCV, setShowCV] = useState(false);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  const cvUrl = "/cv.pdf"; // place cv.pdf in /public or use a full URL
+  useEffect(() => {
+    if (!canvasRef.current) return;
+    initGame(canvasRef.current); // init AFTER canvas exists
+  }, []);
+
+  const cvUrl = "/cv.pdf";
 
   return (
     <TVFrame>
@@ -23,21 +30,14 @@ function App() {
         />
       )}
 
-      {/* Game canvas always in DOM; overlays sit above it */}
-      <canvas id="game" />
+      <canvas id="game" ref={canvasRef} />
 
-      {/* In-game Back button to return home */}
       {started && !showProjects && !showCV && (
-        <button
-          className="back-button"
-          onClick={() => setStarted(false)}
-          title="Back to Home"
-        >
+        <button className="back-button" onClick={() => setStarted(false)} title="Back to Home">
           ⬅️ Back
         </button>
       )}
 
-      {/* Overlays available on Home or even during game if you want */}
       {showProjects && <ProjectsPanel onClose={() => setShowProjects(false)} />}
       {showCV && <CVPanel onClose={() => setShowCV(false)} cvUrl={cvUrl} />}
     </TVFrame>

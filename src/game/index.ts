@@ -1,60 +1,51 @@
 import kaboom from "kaboom";
 
-// Initialize kaboom and assign it to variable k
-const k = kaboom({
-  width: 640,
-  height: 360,
-  scale: 2,
-  background: [0, 0, 0],
-  canvas: document.getElementById("game") as HTMLCanvasElement,
-});
+export function initGame(canvas: HTMLCanvasElement) {
+  const k = kaboom({
+    width: 640,
+    height: 360,
+    scale: 2,
+    background: [0, 0, 0],
+    canvas, // <-- use the real canvas
+  });
 
-// Use destructuring  to get acess to kaboom function
-const { loadSprite, add, sprite, pos, area, body, onKeyDown, z } = k;
+  const {
+    loadSprite, add, sprite, pos, area, body, onKeyDown, addLevel
+  } = k;
 
-// Load a test sprite
-loadSprite("player", "https://i.imgur.com/Wb1qfhK.png");
+  // --- assets ---
+  loadSprite("player", "https://i.imgur.com/Wb1qfhK.png");
+  loadSprite("tileset", "https://i.imgur.com/9g3FUnE.png", { sliceX: 8, sliceY: 8 });
 
-// Load a title sheet
-loadSprite("tileset", "https://i.imgur.com/9g3FUnE.png", {
-  sliceX: 8,
-  sliceY: 8,
-});
+  // --- map ---
+  const map = [
+    "==========",
+    "=        =",
+    "=        =",
+    "=        =",
+    "=        =",
+    "==========",
+  ];
+  const tileSize = 16;
 
-const map = [
-  "==========",
-  "=        =",
-  "=        =",
-  "=        =",
-  "=        =",
-  "==========",
-];
+  addLevel(map, {
+    tileWidth: tileSize,
+    tileHeight: tileSize,
+    tiles: {
+      "=": () => [sprite("tileset", { frame: 3 }), area(), body({ isStatic: true })],
+      " ": () => [sprite("tileset", { frame: 0 })],
+    },
+  });
 
-const tileSize = 16;
+  // --- player ---
+  const player = add([sprite("player"), pos(32, 32), area(), body()]);
 
-k.addLevel(map, {
-  tileWidth: tileSize,
-  tileHeight: tileSize,
-  tiles: {
-    "=": () => [
-      sprite("tileset", { frame: 3 }),
-      area(),
-      body({ isStatic: true }),
-    ],
-    " ": () => [sprite("tileset", { frame: 0 })],
-  },
-});
-// Add the player
-const player = add([
-  sprite("player"),
-  pos(32, 32),
-  area(),
-  body(),
-  z(1),
-]);
+  // --- controls ---
+  onKeyDown("left", () => player.move(-120, 0));
+  onKeyDown("right", () => player.move(120, 0));
+  onKeyDown("up", () => player.move(0, -120));
+  onKeyDown("down", () => player.move(0, 120));
 
-// Movement
-onKeyDown("left", () => player.move(-120, 0));
-onKeyDown("right", () => player.move(120, 0));
-onKeyDown("up", () => player.move(0, -120));
-onKeyDown("down", () => player.move(0, 120));
+  // return context in case you want to add scenes later
+  return k;
+}
